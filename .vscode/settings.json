@@ -6,9 +6,9 @@
 
   // ★ 언어별로 Biome를 기본 포맷터로 지정 (전역 기본 포맷터는 제거)
   "[typescriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[typescript]":      { "editor.defaultFormatter": "biomejs.biome" },
+  "[typescript]": { "editor.defaultFormatter": "biomejs.biome" },
   "[javascriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[javascript]":      { "editor.defaultFormatter": "biomejs.biome" },
+  "[javascript]": { "editor.defaultFormatter": "biomejs.biome" },
 
   // Biome 확장 동작
   "biome.enabled": true,
