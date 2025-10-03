@@ -16,7 +16,7 @@ type RecipeDetail = {
   tags: string[];
   image: string;
   rating: number;
-  mealType: string;
+  mealType: string[];
 };
 
 export default function Recipe() {
@@ -44,7 +44,7 @@ export default function Recipe() {
         </Link>
         <h1 className="detail-title">{recipe.name}</h1>
         <p className="detail-sub">
-          {recipe.cuisine} · {recipe.mealType} · {recipe.difficulty}
+          {recipe.cuisine} · {recipe.mealType[0]} · {recipe.difficulty}
         </p>
       </header>
 
