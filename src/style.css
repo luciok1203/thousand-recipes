@@ -1,0 +1,360 @@
+/* ===== Design tokens (필요 최소) ===== */
+:root{
+  --bg: #f7f7f9;
+  --card-bg: #fff;
+  --text: #16181d;
+  --muted: #6b7280;        /* gray-500 느낌 */
+  --brand: #111827;        /* 거의 검정 */
+  --brand-50: #e5e7eb;     /* hover/focus 테두리 */
+  --ring: #111827;         /* 포커스 링 색 */
+  --radius: 16px;
+  --shadow: 0 8px 24px rgba(0,0,0,.06);
+}
+
+/* ===== Page skeleton ===== */
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body{
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ===== Header ===== */
+.title{
+  margin: 32px auto 16px;
+  padding: 0 16px;
+  max-width: 900px;
+  font-size: clamp(22px, 2.6vw, 28px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ===== Grid: 기본 3열, 좁아지면 2→1열 ===== */
+.recipe-grid{
+  margin: 0 auto;
+  padding: 8px 16px 40px;
+
+  /* 카드 폭 + 여백 고려해서 컨테이너 넓이 제한 (선택) */
+  max-width: 900px;
+
+  display: grid;
+  gap: 16px;
+
+  /* ★ 기본은 3열 고정 */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* 태블릿: 2열 */
+@media (max-width: 600px){
+  .recipe-grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* 모바일: 1열 */
+@media (max-width: 300px){
+  .recipe-grid{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== Card link wrapper ===== */
+.recipe-card-link{
+  display: block;
+  border-radius: var(--radius);
+  outline: none;
+}
+.recipe-card-link:focus-visible{
+  box-shadow: 0 0 0 3px var(--ring) inset, 0 0 0 3px var(--ring);
+}
+
+/* ===== Card ===== */
+.recipe-card{
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  border: 1px solid transparent;
+}
+.recipe-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0,0,0,.10);
+  border-color: var(--brand-50);
+}
+
+/* ===== Image ===== */
+.recipe-image-container{
+  aspect-ratio: 16 / 9;
+  background: #f0f2f5;
+  overflow: hidden;
+}
+.recipe-image{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ===== Header row inside card ===== */
+.recipe-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 14px 6px;
+}
+.recipe-name{
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  flex: 1 1 auto;
+}
+.recipe-difficulty{
+  flex: 0 0 auto;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+}
+
+/* ===== Tags ===== */
+.recipe-tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 14px 14px;
+}
+.recipe-tag{
+  font-size: 10px;
+  color: var(--muted);
+  background: #f9fafb;
+  border: 1px solid #eef0f3;
+  padding: 4px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* ===== Pagination ===== */
+.pagination{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  padding: 20px 16px 48px;
+}
+.pagination-button{
+  appearance: none;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: var(--text);
+  padding: 8px 12px;
+  min-width: 36px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+.pagination-button:hover:not(:disabled):not([aria-current="page"]){
+  background: #f9fafb;
+  border-color: var(--brand-50);
+  transform: translateY(-1px);
+}
+
+.pagination-button:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ring) inset, 0 0 0 3px var(--ring);
+}
+.pagination-button:disabled{
+  opacity: .45;
+  cursor: not-allowed;
+}
+.pagination .active,
+.pagination-button[aria-current="page"]{
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+
+/* ===== Motion safety ===== */
+@media (prefers-reduced-motion: reduce){
+  .recipe-card,
+  .pagination-button{ transition: none; }
+}
+
+/* =========================================================
+   Recipe Detail (상세 페이지 전용)
+   모든 규칙은 .recipe-detail 네임스페이스에 한정
+   App.tsx 스타일과 충돌 없음
+   ========================================================= */
+
+.recipe-detail{
+  max-width: 900px;
+  margin: 24px auto 56px;
+  padding: 0 16px;
+}
+
+/* 상단 헤더 */
+.recipe-detail .detail-header{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.recipe-detail .back-link{
+  color: var(--muted, #6b7280);
+  font-size: 14px;
+}
+.recipe-detail .back-link:hover{ text-decoration: underline; }
+
+.recipe-detail .detail-title{
+  margin: 0;
+  font-size: clamp(22px, 2.6vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.recipe-detail .detail-sub{
+  margin: 0;
+  color: var(--muted, #6b7280);
+  font-size: 14px;
+}
+
+/* 히어로 이미지 */
+.recipe-detail .detail-hero{
+  border-radius: var(--radius, 16px);
+  overflow: hidden;
+  box-shadow: var(--shadow, 0 8px 24px rgba(0,0,0,.06));
+  border: 1px solid #eaecef;
+  margin: 12px 0 18px;
+  background: #f0f2f5;
+}
+.recipe-detail .detail-image{
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+/* 메타 정보 */
+.recipe-detail .detail-meta{
+  display: grid;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.recipe-detail .meta-grid{
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 600px){
+  .recipe-detail .meta-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.recipe-detail .meta-card{
+  background: var(--card-bg, #fff);
+  border: 1px solid #eef0f3;
+  border-radius: 12px;
+  padding: 10px 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.04);
+  display: grid;
+  gap: 2px;
+}
+.recipe-detail .meta-label{
+  color: var(--muted, #6b7280);
+  font-size: 12px;
+}
+.recipe-detail .meta-value{
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* 태그(상세 전용 범위) — 목록 페이지의 .recipe-tag에는 영향 없음 */
+.recipe-detail .detail-tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.recipe-detail .detail-tags .recipe-tag{
+  font-size: 12px;
+  color: var(--muted, #6b7280);
+  background: #f9fafb;
+  border: 1px solid #eef0f3;
+  padding: 4px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* 본문 섹션(재료 / 만드는 법) */
+.recipe-detail .detail-sections{
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+}
+@media (max-width: 900px){
+  .recipe-detail .detail-sections{ grid-template-columns: 1fr; }
+}
+.recipe-detail .panel{
+  background: var(--card-bg, #fff);
+  border: 1px solid #eef0f3;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.05);
+  padding: 14px 16px;
+}
+.recipe-detail .panel-title{
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -.01em;
+}
+.recipe-detail .ingredients,
+.recipe-detail .instructions{
+  margin: 0;
+  padding-left: 18px;
+  color: #2b2f38;
+  line-height: 1.6;
+  font-size: 14px;
+}
+.recipe-detail .ingredients li + li,
+.recipe-detail .instructions li + li{ margin-top: 4px; }
+
+/* 하단 푸터 */
+.recipe-detail .detail-footer{
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* 뒤로가기 버튼(상세 전용) — 목록의 버튼 스타일과 충돌 방지 */
+.recipe-detail .back-button{
+  appearance: none;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: var(--text, #16181d);
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+.recipe-detail .back-button:hover{
+  background: #f9fafb;
+  border-color: var(--brand-50, #e5e7eb);
+  transform: translateY(-1px);
+}
+.recipe-detail .back-button:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ring, #111827) inset, 0 0 0 3px var(--ring, #111827);
+}
+
+/* 모션 최소화 선호 시 전환 제거 (상세 범위 한정) */
+@media (prefers-reduced-motion: reduce){
+  .recipe-detail .back-button{ transition: none; }
+}
